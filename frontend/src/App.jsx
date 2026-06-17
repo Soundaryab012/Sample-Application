@@ -1,63 +1,37 @@
 import { useState } from "react";
-import "./App.css";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
-  const [currentBalance, setCurrentBalance] = useState(10000);
-  const [amount, setAmount] = useState("");
+  const [user, setUser] = useState(null);
+  const [showLogin, setShowLogin] = useState(true);
 
-  const handleDeposit = () => {
-    const value = parseInt(amount);
+ const handleLogout = () => {
+  setUser(null);
+};
 
-    if (value > 0) {
-      setCurrentBalance((prev) => prev + value);
-      setAmount("");
-    }
-  };
-
-  const handleWithdraw = () => {
-    const value = parseInt(amount);
-
-    if (value > currentBalance) {
-      alert("Insufficient Balance!");
-      return;
-    }
-
-    if (value > 0) {
-      setCurrentBalance((prev) => prev - value);
-      setAmount("");
-    }
-  };
-
+if (user) {
   return (
-    <div className="dashboard">
-      <div className="bank-card">
-        <h1>🏦 Smart ATM Dashboard</h1>
-
-        <div className="balance-card">
-          <span>Current Balance</span>
-          <h2>₹ {currentBalance.toLocaleString()}</h2>
-        </div>
-
-        <div className="transaction-panel">
-          <input
-            type="number"
-            placeholder="Enter amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-          />
-
-          <div className="actions">
-            <button className="deposit-btn" onClick={handleDeposit}>
-              Deposit
-            </button>
-
-            <button className="withdraw-btn" onClick={handleWithdraw}>
-              Withdraw
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Dashboard
+      user={user}
+      onLogout={handleLogout}
+    />
+  );
+}
+  return (
+    <>
+      {showLogin ? (
+        <Login
+          setUser={setUser}
+          setShowLogin={setShowLogin}
+        />
+      ) : (
+        <Signup
+          setShowLogin={setShowLogin}
+        />
+      )}
+    </>
   );
 }
 
